@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>브릿지 카페 소식</title>
+  <meta name="description" content="이번 주 신메뉴와 혜택, 매장 사진을 전해 드립니다.">
+  <link rel="icon" href="로고.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f1e8;
+      --card: #fffdf9;
+      --ink: #2b2522;
+      --muted: #7a6d64;
+      --brown: #7b4a36;
+      --line: #e6dccd;
+      --soft: #efe4d4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 16px 64px;
+    }
+
+    /* 머리 부분 */
+    header {
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+    header img {
+      width: 132px;
+      height: auto;
+      mix-blend-mode: multiply; /* 로고의 흰 바탕을 배경색에 자연스럽게 녹인다 */
+    }
+    header h1 {
+      font-family: "Gowun Batang", serif;
+      font-size: 2rem;
+      margin-top: 8px;
+      letter-spacing: 0.02em;
+    }
+    header .where {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .date {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 4px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--brown);
+      background: var(--card);
+    }
+
+    /* 구역 공통 */
+    section { margin-top: 40px; }
+    h2 {
+      font-family: "Gowun Batang", serif;
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+      color: var(--brown);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px 22px;
+    }
+
+    /* 사장님 한마디 */
+    .note {
+      white-space: pre-line;
+      font-size: 1.05rem;
+      line-height: 1.9;
+    }
+
+    /* 신메뉴 */
+    .menus { display: grid; gap: 14px; }
+    .menu-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .menu-name {
+      font-family: "Gowun Batang", serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .menu-price {
+      font-weight: 700;
+      color: var(--brown);
+      white-space: nowrap;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--card);
+      background: var(--brown);
+      border-radius: 6px;
+      padding: 1px 8px;
+      margin-bottom: 6px;
+    }
+    .menu-desc { color: var(--muted); margin-top: 6px; }
+
+    /* 혜택·알림 */
+    .list { list-style: none; display: grid; gap: 10px; }
+    .list li {
+      background: var(--soft);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    /* 매장 사진 */
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media (min-width: 620px) {
+      .photos { grid-template-columns: repeat(3, 1fr); }
+    }
+    .photos button {
+      border: 0;
+      padding: 0;
+      background: none;
+      cursor: zoom-in;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+    }
+    .photos img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .photos button:hover img { transform: scale(1.03); }
+
+    dialog {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      max-width: min(92vw, 720px);
+      margin: auto;
+    }
+    dialog::backdrop { background: rgba(20, 15, 12, 0.85); }
+    dialog img { width: 100%; height: auto; display: block; border-radius: 10px; }
+    dialog button {
+      display: block;
+      margin: 12px auto 0;
+      padding: 8px 22px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--ink);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* 가게 소개 */
+    .about ul { list-style: none; display: grid; gap: 6px; margin-bottom: 16px; }
+    .about li::before { content: "·"; color: var(--brown); font-weight: 700; margin-right: 8px; }
+    .map-link {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: var(--brown);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .map-link:hover { opacity: 0.9; }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 56px;
+    }
+
+    .hidden { display: none; }
+    .message { text-align: center; color: var(--muted); padding: 40px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="자료/로고.png" alt="브릿지 카페 로고">
+      <h1 id="store-name">브릿지 카페</h1>
+      <p class="where" id="store-where"></p>
+      <span class="date hidden" id="news-date"></span>
+    </header>
+
+    <p class="message" id="message">이번 주 소식을 불러오고 있습니다.</p>
+
+    <main id="content" class="hidden">
+      <section id="note-section">
+        <h2>이번 주 이야기</h2>
+        <div class="card note" id="note"></div>
+      </section>
+
+      <section id="menu-section">
+        <h2>새로 나온 메뉴</h2>
+        <div class="menus" id="menus"></div>
+      </section>
+
+      <section id="deal-section">
+        <h2>이번 주 혜택</h2>
+        <ul class="list" id="deals"></ul>
+      </section>
+
+      <section id="etc-section">
+        <h2>알려 드립니다</h2>
+        <ul class="list" id="etcs"></ul>
+      </section>
+
+      <section id="photo-section">
+        <h2>매장 사진</h2>
+        <div class="photos" id="photos"></div>
+      </section>
+
+      <section id="about-section">
+        <h2>가게 소개</h2>
+        <div class="card about">
+          <ul id="features"></ul>
+          <a class="map-link" id="map-link" target="_blank" rel="noopener">지도에서 위치 보기</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>매주 새로운 소식으로 바뀝니다.</p>
+    </footer>
+  </div>
+
+  <dialog id="viewer">
+    <img id="viewer-img" alt="">
+    <button type="button" id="viewer-close">닫기</button>
+  </dialog>
+
+  <script>
+    // 프로그램(인스타변환.py)이 매주 만들어 두는 '완성/소식.json'을 읽어서 화면을 채운다
+    const 소식_주소 = encodeURI("완성/소식.json") + "?v=" + Date.now();
+
+    function 글자(id, 내용) {
+      document.getElementById(id).textContent = 내용;
+    }
+
+    function 목록_채우기(id, 항목들) {
+      const 목록 = document.getElementById(id);
+      항목들.forEach(function (내용) {
+        const li = document.createElement("li");
+        li.textContent = 내용;
+        목록.appendChild(li);
+      });
+    }
+
+    function 숨기기(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    function 날짜_글(날짜) {
+      const [년, 월, 일] = 날짜.split("-").map(Number);
+      return 년 + "년 " + 월 + "월 " + 일 + "일 소식";
+    }
+
+    function 화면_채우기(소식) {
+      if (소식.가게이름) {
+        글자("store-name", 소식.가게이름);
+        document.title = 소식.가게이름 + " 소식";
+      }
+      글자("store-where", 소식.위치 || "");
+      if (소식.만든날) {
+        글자("news-date", 날짜_글(소식.만든날));
+        document.getElementById("news-date").classList.remove("hidden");
+      }
+
+      // 이번 주 이야기
+      if (소식.인사말) 글자("note", 소식.인사말);
+      else 숨기기("note-section");
+
+      // 신메뉴
+      const 메뉴들 = 소식.메뉴들 || [];
+      const 메뉴칸 = document.getElementById("menus");
+      메뉴들.forEach(function (메뉴) {
+        const 카드 = document.createElement("div");
+        카드.className = "card";
+
+        const 표시 = document.createElement("span");
+        표시.className = "badge";
+        표시.textContent = "NEW";
+
+        const 윗줄 = document.createElement("div");
+        윗줄.className = "menu-top";
+        const 이름 = document.createElement("span");
+        이름.className = "menu-name";
+        이름.textContent = 메뉴.이름;
+        const 가격 = document.createElement("span");
+        가격.className = "menu-price";
+        가격.textContent = 메뉴.가격 || "";
+        윗줄.append(이름, 가격);
+
+        const 설명 = document.createElement("p");
+        설명.className = "menu-desc";
+        설명.textContent = 메뉴.설명 || "";
+
+        카드.append(표시, 윗줄, 설명);
+        메뉴칸.appendChild(카드);
+      });
+      if (!메뉴들.length) 숨기기("menu-section");
+
+      // 혜택과 알림
+      목록_채우기("deals", 소식.할인들 || []);
+      if (!(소식.할인들 || []).length) 숨기기("deal-section");
+      목록_채우기("etcs", 소식.기타 || []);
+      if (!(소식.기타 || []).length) 숨기기("etc-section");
+
+      // 매장 사진 (누르면 크게 보기)
+      const 사진칸 = document.getElementById("photos");
+      const 보기창 = document.getElementById("viewer");
+      const 보기사진 = document.getElementById("viewer-img");
+      (소식.사진들 || []).forEach(function (경로, 순서) {
+        const 버튼 = document.createElement("button");
+        버튼.type = "button";
+        버튼.setAttribute("aria-label", "매장 사진 " + (순서 + 1) + " 크게 보기");
+        const 사진 = document.createElement("img");
+        사진.src = encodeURI(경로);
+        사진.alt = "매장 사진 " + (순서 + 1);
+        사진.loading = "lazy";
+        버튼.appendChild(사진);
+        버튼.addEventListener("click", function () {
+          보기사진.src = 사진.src;
+          보기사진.alt = 사진.alt;
+          보기창.showModal();
+        });
+        사진칸.appendChild(버튼);
+      });
+      if (!(소식.사진들 || []).length) 숨기기("photo-section");
+
+      // 가게 소개와 지도
+      목록_채우기("features", 소식.특징들 || []);
+      const 지도 = document.getElementById("map-link");
+      if (소식.위치) {
+        지도.href = "https://map.naver.com/p/search/" + encodeURIComponent(소식.위치 + " " + (소식.가게이름 || ""));
+      } else {
+        지도.classList.add("hidden");
+      }
+      if (!(소식.특징들 || []).length && !소식.위치) 숨기기("about-section");
+
+      숨기기("message");
+      document.getElementById("content").classList.remove("hidden");
+    }
+
+    document.getElementById("viewer-close").addEventListener("click", function () {
+      document.getElementById("viewer").close();
+    });
+    document.getElementById("viewer").addEventListener("click", function (event) {
+      if (event.target === this) this.close(); // 사진 바깥을 눌러도 닫힘
+    });
+
+    fetch(소식_주소)
+      .then(function (응답) {
+        if (!응답.ok) throw new Error(응답.status);
+        return 응답.json();
+      })
+      .then(화면_채우기)
+      .catch(function () {
+        글자("message", "아직 이번 주 소식이 없습니다. 곧 올라올 예정입니다.");
+      });
+  </script>
+</body>
+</html>
